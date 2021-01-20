@@ -1,0 +1,59 @@
+请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
+
+
+示例 1：
+
+输入：s = "We are happy."
+输出："We%20are%20happy."
+
+开始做这个题目时候，忘记考虑字符串长度会变化了，直接将空格替换为%20，忽略了字符串中一个字符的位置无法存放三个字符
+之后又想到了先将空格替换为%，再向字符串中进行插入操作，貌似可行，但是却超时了
+
+后来看了题解的思路，先将字符串中空格数量求出，更新字符串长度为修改后的长度，从字符串末尾遍历，若不是空格，则直接赋值，若为空格，则将其相邻的三个字符设置为所需值，直到无空格时为止。
+class Solution {
+public:
+    string replaceSpace(string s) {
+        int num=0;
+        int length=s.size();
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]==' ')
+                num++;
+        }
+        s.resize(length+2*num);
+        for(int i=length-1,j=s.size()-1;i<j;j--,i--)
+        {
+            if(s[i]!=' ')
+                s[j]=s[i];
+            else
+            {
+                s[j]='0';
+                s[j-1]='2';
+                s[j-2]='%';
+                j-=2;
+            }
+        }
+        return s;
+    }
+};
+
+后来有发现了更好的思路，利用c++字符数组的特性，创建新数组，变换后的数组值直接依次插入到新数组的末尾，得到相应的结果
+使用push_back
+class Solution {
+public:
+    string replaceSpace(string s) {
+        string s1;
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]==' ')
+            {
+                s1.push_back('%');
+                s1.push_back('2');
+                s1.push_back('0');
+            }
+            else
+                s1.push_back(s[i]);
+        }
+        return s1;
+    }
+};
