@@ -1,0 +1,63 @@
+在一个 n * m 的二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个高效的函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+
+示例:
+
+现有矩阵 matrix 如下：
+
+[
+  [1,   4,  7, 11, 15],
+  [2,   5,  8, 12, 19],
+  [3,   6,  9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30]
+]
+给定 target = 5，返回 true。
+
+给定 target = 20，返回 false。
+
+解法1.暴力解法：不考虑数组中元素的大小顺序，直接按照顺序遍历数组中所有值，知道找到目标值为止
+
+由于二维数组是由多个一维数组合成，故其行数为一维数组的个数（matrix.size())，列数为其中一个一维数组的长度（matrix[0].size())
+
+class Solution {
+public:
+    bool findNumberIn2DArray(vector<vector<int>>& matrix, int target) 
+    {
+        if( matrix.size() == 0 || matrix[0].size()==0)
+            return false;//若数组为空或数组不存在，返回false
+        int rows=matrix.size(),columns=matrix[0].size();
+        for(int i=0;i<rows;i++)
+        {
+            for(int j=0;j<columns;j++)
+            {
+                if(matrix[i][j]==target)
+                    return true;
+            }
+        }
+        return false;
+    }
+};
+
+解法2.线性查找：考虑二维数组中元素的大小关系，可知每一列中从上到下元素依次增大，故小于本行中某一列的元素，一定小于下一行中该列的元素，如从右至左遍历某一行，则该行已经遍历过的列（大于目标数的列）
+下一行中无需进行遍历。
+
+class Solution {
+public:
+    bool findNumberIn2DArray(vector<vector<int>>& matrix, int target) 
+    {
+        if( matrix.size() == 0 || matrix[0].size()==0)
+            return false;//若数组为空或数组不存在，返回false
+        int rows=matrix.size(),columns=matrix[0].size();
+        int row=0,column=columns-1;
+        while(row<rows && column>=0)
+        {
+            if(matrix[row][column]==target)
+                return true;
+            else if(matrix[row][column]>target)
+                column--;
+            else
+                row++;
+        }
+        return false;
+    }
+};
