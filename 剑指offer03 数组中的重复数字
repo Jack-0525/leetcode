@@ -1,0 +1,24 @@
+在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
+
+示例 1：
+
+输入：
+[2, 3, 1, 0, 2, 5, 3]
+输出：2 或 3 
+ 
+ 解题思路：利用哈希表进行解答，利用unordered_map创建一个无序的哈希列表，存放（key,value)键值对，将nums数组中的值存放进入哈希表中，并将其位置置为true，在之后的插入中，若遍历到true的节点，则将其输出
+ 
+class Solution {
+public:
+    int findRepeatNumber(vector<int>& nums) 
+    {
+        unordered_map<int,bool> map;
+        for(int num:nums)//foreach遍历，遍历nums数组中的每一个值，即相当于num=nums[i]
+        {
+            if(map[num])
+                return num;
+            map[num]=true;
+        }
+        return -1;
+    }
+};
